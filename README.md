@@ -4,8 +4,8 @@
 
 
 ## iOS App Preview
-![iOS Preview  1](https://imgur.com/96l9mlo "iOS Preview 1")
-![iOS Preview 2](https://imgur.com/KYNmaiX "iOS Preview 2")
+![iOS Preview  1](https://imgur.com/gallery/96l9mlo "iOS Preview 1")
+![iOS Preview 2](https://imgur.com/gallery/KYNmaiX "iOS Preview 2")
 
 ## Android App Preview
 ![Android Preview 1](https://imgur.com/O6P9tyA "Android Preview 1")
