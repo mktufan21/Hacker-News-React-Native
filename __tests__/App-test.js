@@ -1,20 +1,15 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {render, cleanup, act, fireEvent} from '@testing-library/react-native';
 import OGApp from '../App';
-import {QueryClient, QueryClientProvider, useQuery} from 'react-query';
-import {HEADLINE_VIEW_CONTAINER, TestIDs} from '../src/Utils/testIds';
-import {useFetchAllTopStories} from '../src/Service/Api';
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {TestIDs} from '../src/Utils/testIds';
+import {useFetchAllTopStories} from '../src/Service/useFetchAllTopStories';
 import {useFetchItemById} from '../src/Service/useFetchItemById';
-import {
-  commentMock,
-  headLineDetails,
-  storyListIds,
-} from './ApiMock/APPTestMock';
+import {headLineDetails, storyListIds} from './ApiMock/APPTestMock';
 
 const fetch = require('node-fetch');
 
-jest.mock('../src/Service/Api', () => ({
+jest.mock('../src/Service/useFetchAllTopStories', () => ({
   useFetchAllTopStories: jest.fn(),
 }));
 jest.mock('../src/Service/useFetchItemById', () => ({
@@ -57,22 +52,20 @@ describe('Testing react app', () => {
     });
   });
   test('test if user can share the URL', async () => {
-    const {queryAllByTestId, getByTestId} = await render(
+    const {getByTestId} = await render(
       <QueryClientProvider client={queryClient}>
         <OGApp />
       </QueryClientProvider>,
     );
-    await act(async () => {
-      expect(
-        queryAllByTestId(TestIDs.HEADLINE_VIEW_LIST_SHARE + headLineDetails.id),
-      ).toBeDefined();
+    expect(
+      getByTestId(TestIDs.HEADLINE_VIEW_LIST_SHARE + headLineDetails.id),
+    ).toBeDefined();
 
-      const screen1 = getByTestId(
-        TestIDs.HEADLINE_VIEW_LIST_SHARE + headLineDetails.id,
-      );
-      expect(screen1).toBeTruthy();
-      fireEvent(screen1, screen1.props.onPress ? 'onPress' : 'onClick');
-    });
+    const screen1 = getByTestId(
+      TestIDs.HEADLINE_VIEW_LIST_SHARE + headLineDetails.id,
+    );
+    expect(screen1).toBeTruthy();
+    fireEvent(screen1, screen1.props.onPress ? 'onPress' : 'onClick');
   });
   test('test if user can open the URL', async () => {
     const {getByTestId} = await render(
@@ -112,6 +105,19 @@ describe('Testing react app', () => {
       fireEvent(screen1, screen1.props.onPress ? 'onPress' : 'onClick');
     });
   });
-
-  
+  test('test if pages can handle empty data', async () => {
+    useFetchAllTopStories.mockImplementation(() => ({
+      isError: true,
+      data: [],
+    }));
+    const {getByTestId} = await render(
+      <QueryClientProvider client={queryClient}>
+        <OGApp />
+      </QueryClientProvider>,
+    );
+    await act(async () => {
+      const screen1 = getByTestId(TestIDs.EMPTY_VIEW);
+      expect(screen1).toBeTruthy();
+    });
+  });
 });
