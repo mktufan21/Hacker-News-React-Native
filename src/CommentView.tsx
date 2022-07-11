@@ -6,7 +6,11 @@ import {rootStyles} from './styles';
 import EmptyView from './common/EmptyView';
 
 const ignoredStyles = ['fontFamily'];
-export const CommentView = ({id}): JSX.Element => {
+interface Props {
+  id: string;
+}
+export const CommentView = (props: Props): JSX.Element => {
+  const {id} = props;
   //get comment details by id
   const query = useFetchItemById(id);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -47,7 +51,7 @@ export const CommentView = ({id}): JSX.Element => {
         comment.kids &&
         comment.kids.map(id => (
           <View style={styles.childComment}>
-            <CommentView id={id} />
+            <CommentView id={id} key={id} />
           </View>
         ))}
     </TouchableOpacity>

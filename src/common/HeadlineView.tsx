@@ -21,7 +21,7 @@ interface Props {
   onListItemPress: CallableFunction;
   id: string;
 }
-export const HeadlineView = (props: Props): JSX.Element => {
+const HeadlineViewFunctional = (props: Props): JSX.Element => {
   const {id, onListItemPress} = props;
   //get story details by id
   const query = useFetchItemById(id);
@@ -88,7 +88,6 @@ export const HeadlineView = (props: Props): JSX.Element => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     padding: 10,
@@ -157,3 +156,8 @@ const styles = StyleSheet.create({
     color: '#0000EE',
   },
 });
+const areEqual = (prevProps: Props, nextProps: Props): boolean => {
+  return prevProps.id === nextProps.id;
+};
+
+export const HeadlineView = React.memo(HeadlineViewFunctional, areEqual);
